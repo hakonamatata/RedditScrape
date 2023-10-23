@@ -18,7 +18,7 @@ from compressed_json_wrapper import read_gzipped_json, GzippedJsonWriter
 import re
 from itertools import islice
 from tqdm import tqdm
-from load_files import get_files
+from load_files2 import get_files
 import threading
 
 # Setup the configparser to read the config file named 'config'
@@ -76,7 +76,7 @@ def write_log_file():
                 time.sleep(1)
     #print(f"Done writing download logs")
 
-# Run in the background and store the post_id of every file we download. 
+# Run in the background and store the post_id of every file we download.
 # This will help if we have to start over
 #write_thread = threading.Thread(target=write_log_file)
 write_thread = threading.Thread(target=write_log_file, daemon=True)
@@ -133,7 +133,7 @@ def main():
     global downloaded_urls
     global giant_ass_download_list
     downloaded_urls = set()
-    
+
     # Read in the list of subreddit names from the text file
     subreddit_file = 'subs'
     json_folder = root_folder + "json/"
@@ -180,22 +180,22 @@ def main():
 
         print(f"\nNow Downloading...this may take a while")
         for entry in giant_ass_download_list:
-            if entry['post_id'] in download_posts:
-                #print(f"Skipping {entry['post_id']} - already in our log",flush=True)
-                log_msg = f"Skipped,permalink:{entry['permalink']}, post_id {entry['post_id']} in downloads.log"
-                skipped_files.put(log_msg)
-                continue
-            else:
+            # if entry['post_id'] in download_posts:
+            #     #print(f"Skipping {entry['post_id']} - already in our log",flush=True)
+            #     log_msg = f"Skipped,permalink:{entry['permalink']}, post_id {entry['post_id']} in downloads.log"
+            #     skipped_files.put(log_msg)
+            #     continue
+            # else:
                 futures.append(executor.submit(gallery_download, entry))
 
         with tqdm(total=len(futures), desc="Downloading:") as pbar:
             for future in concurrent.futures.as_completed(futures):
                 try:
                     result = future.result()
-                    pbar.update(1) 
+                    pbar.update(1)
                 except Exception as e:
                     print(f"Error in main.main: {e}")
-        
+
         #file_log_queue.put(None)
         file_log_queue.put("DONE")
         # Wait for the write_log_file thread to terminate
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     while not json_skip_queue.empty():
         item = json_skip_queue.get().strip()
         ignoredSet.add(item)
-    
+
     while not download_success.empty():
         item = download_success.get().strip()
         downloadSet.add(item)
@@ -256,7 +256,7 @@ if __name__ == "__main__":
     while not download_errors.empty():
             item = download_errors.get().strip()
             errorSet.add(item)
-    
+
     while not duplicate_urls.empty():
             item = duplicate_urls.get().strip()
             duplicateSet.add(item)
@@ -281,7 +281,7 @@ if __name__ == "__main__":
         for line in skippedSet:
             log.write(f" - {line}\n")
             skipCount += 1
-        
+
         log.write("\nList of ignored posts (unsupported domain):\n")
         # while not json_skip_queue.empty():
         #     item = json_skip_queue.get().strip()
