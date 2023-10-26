@@ -160,8 +160,6 @@ def main():
     raw_download_counter = len(giant_ass_download_list)
     my_download_counter = len(giant_ass_download_list)
 
-
-
     with concurrent.futures.ThreadPoolExecutor(max_workers=int(max_workers)) as executor:
         futures = []
 
@@ -180,12 +178,17 @@ def main():
 
         print(f"\nNow Downloading...this may take a while")
         for entry in giant_ass_download_list:
+
+            # TODO: Fix this, entry['post_id'] throws error: indices must be integers or slices, not str
+            # print(download_posts)
+
             # if entry['post_id'] in download_posts:
-            #     #print(f"Skipping {entry['post_id']} - already in our log",flush=True)
-            #     log_msg = f"Skipped,permalink:{entry['permalink']}, post_id {entry['post_id']} in downloads.log"
-            #     skipped_files.put(log_msg)
-            #     continue
+                # #print(f"Skipping {entry['post_id']} - already in our log",flush=True)
+                # log_msg = f"Skipped,permalink:{entry['permalink']}, post_id {entry['post_id']} in downloads.log"
+                # skipped_files.put(log_msg)
+                # continue
             # else:
+                # print(f"Adding: {entry['post_id']} do download list")
                 futures.append(executor.submit(gallery_download, entry))
 
         with tqdm(total=len(futures), desc="Downloading:") as pbar:

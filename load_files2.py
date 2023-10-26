@@ -54,50 +54,48 @@ def process_json(data):
 
     # Process each post in the data array
     for post in data['data']:
-        author = post['author']
-        created_utc = post['created_utc']
-        distinguished = post.get('distinguished', None)
-        edited = post['edited']
-        post_id = post['id']
-        is_original_content = post['is_original_content']
-        is_self = post['is_self']
-        link_flair_text = post.get('link_flair_text', None)
-        locked = post['locked']
-        name = post['name']
-        nsfw = post['nsfw']
-        num_comments = post['num_comments']
-        permalink = post['permalink']
-        score = post['score']
-        selftext = post['selftext']
-        spoiler = post['spoiler']
-        stickied = post['stickied']
-        title = post['title']
-        upvote_ratio = post['upvote_ratio']
-        url = post['url']
+        # author = post['author']
+        # created_utc = post['created_utc']
+        # distinguished = post.get('distinguished', None)
+        # edited = post['edited']
+        # post_id = post['id']
+        # is_original_content = post['is_original_content']
+        # is_self = post['is_self']
+        # link_flair_text = post.get('link_flair_text', None)
+        # locked = post['locked']
+        # name = post['name']
+        # nsfw = post['nsfw']
+        # num_comments = post['num_comments']
+        # permalink = post['permalink']
+        # score = post['score']
+        # selftext = post['selftext']
+        # spoiler = post['spoiler']
+        # stickied = post['stickied']
+        # title = post['title']
+        # upvote_ratio = post['upvote_ratio']
+        # url = post['url']
 
-        print(f"\nPost Details:")
-        print(f"  Author: {author}")
-        print(f"  Created UTC: {created_utc}")
-        print(f"  Distinguished: {distinguished}")
-        print(f"  Edited: {edited}")
-        print(f"  ID: {post_id}")
-        print(f"  Is Original Content: {is_original_content}")
-        print(f"  Is Self: {is_self}")
-        print(f"  Link Flair Text: {link_flair_text}")
-        print(f"  Locked: {locked}")
-        print(f"  Name: {name}")
-        print(f"  NSFW: {nsfw}")
-        print(f"  Number of Comments: {num_comments}")
-        print(f"  Permalink: {permalink}")
-        print(f"  Score: {score}")
-        print(f"  Self Text: {selftext}")
-        print(f"  Spoiler: {spoiler}")
-        print(f"  Stickied: {stickied}")
-        print(f"  Title: {title}")
-        print(f"  Upvote Ratio: {upvote_ratio}")
-        print(f"  URL: {url}")
-
-        # TODO: only add values over a certain threshold
+        # print(f"\nPost Details:")
+        # print(f"  Author: {author}")
+        # print(f"  Created UTC: {created_utc}")
+        # print(f"  Distinguished: {distinguished}")
+        # print(f"  Edited: {edited}")
+        # print(f"  ID: {post_id}")
+        # print(f"  Is Original Content: {is_original_content}")
+        # print(f"  Is Self: {is_self}")
+        # print(f"  Link Flair Text: {link_flair_text}")
+        # print(f"  Locked: {locked}")
+        # print(f"  Name: {name}")
+        # print(f"  NSFW: {nsfw}")
+        # print(f"  Number of Comments: {num_comments}")
+        # print(f"  Permalink: {permalink}")
+        # print(f"  Score: {score}")
+        # print(f"  Self Text: {selftext}")
+        # print(f"  Spoiler: {spoiler}")
+        # print(f"  Stickied: {stickied}")
+        # print(f"  Title: {title}")
+        # print(f"  Upvote Ratio: {upvote_ratio}")
+        # print(f"  URL: {url}")
 
         entry_json_to_download = {
           "author" : post['author'],
@@ -108,13 +106,17 @@ def process_json(data):
           "url": post['url']
         }
 
-        giant_ass_list_to_download.append(entry_json_to_download)
+        # only add if upvote ratio is over 0.8
+        if post['upvote_ratio'] > 0.8:
+            giant_ass_list_to_download.append(entry_json_to_download)
+        else:
+            print(f"upvote rate: {post['upvote_ratio']}, ignoring")
 
     return giant_ass_list_to_download
 
 if __name__ == '__main__':
     # Replace with the path to your JSON file
-    file_path = 'C:\git\RedditScrape\json\LegalTeens-top-100000-results.json'
+    file_path = 'C:\git\RedditScrape\json\test.json'
 
     # Read and process the JSON file
     data = get_files(file_path)
